@@ -35,6 +35,13 @@ class Ball {
     }
 }
 
+var colors = [
+    rgbToHex(255, 0, 0),
+    rgbToHex(0, 255, 0),
+    rgbToHex(0, 0, 255),
+    rgbToHex(255, 255, 0)
+]
+
 class Helix {
     constructor(initArgs) {
         this.a = initArgs.a
@@ -48,7 +55,7 @@ class Helix {
         let turns = initArgs.turns
 
         let n = randInt(128, 256)
-        let r = 10
+        let r = 20
         for (let i = 0; i < n; i++) {
             let theta = i * 2 * Math.PI * turns / n
             this.balls.push(
@@ -57,11 +64,7 @@ class Helix {
                     y: this.y0 + Math.floor(this.b * Math.sin(theta)),
                     z: this.z0 + i * r,
                     r: r,
-                    fillStyle: rgbToHex(
-                        128 + Math.floor(128 * Math.random()),
-                        128 + Math.floor(128 * Math.random()),
-                        128 + Math.floor(128 * Math.random())
-                    )
+                    fillStyle: colors[Math.floor(4 * Math.random())]
                 })
             )
         }
@@ -73,21 +76,25 @@ class Helix {
 
     move() {
         this.theta++
-        if (this.theta == 360) {
-            theta = 0
+        if (this.theta > 360) {
+            this.theta = 0
         }
         let thetaRad = this.theta * Math.PI / 180
         let xpred = this.balls[0].x
         let ypred = this.balls[0].y
+        let zpred = this.balls[0].z
         this.balls[0].x = this.x0 + Math.floor(this.a * Math.cos(thetaRad))
-        this.balls[0].y = this.y0 + Math.floor(this.b * Math.sin(thetaRad))
+        this.balls[0].y = this.y0 - Math.floor(this.b * Math.sin(thetaRad))
         for (let i = 1; i < this.balls.length; i++) {
             let xsave = this.balls[i].x
             let ysave = this.balls[i].y
+            let zsave = this.balls[i].z
             this.balls[i].x = xpred
             this.balls[i].y = ypred
+            this.balls[i].z = zpred
             xpred = xsave
             ypred = ysave
+            zpred = zsave
         }
     }
 }
