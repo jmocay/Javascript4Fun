@@ -14,7 +14,7 @@ function init() {
         320, 200)
     starfield = new Starfield()
 
-    setInterval(draw, 32);
+    setInterval(draw, 16);
 }
 
 function draw() {
@@ -22,8 +22,8 @@ function draw() {
     ctx.fillStyle = rgbToHex(0, 0, 0)
     ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-    // starfield.draw()
-    // starfield.move()
+    starfield.draw()
+    starfield.move()
 
     ctx.translate(Math.floor(canvas.width / 2), Math.floor(canvas.height / 2))
 

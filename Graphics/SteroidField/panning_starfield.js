@@ -4,10 +4,10 @@ var maxX
 var maxY
 
 function Starfield() {
-    minX = -Math.floor(canvas.width / 2)
-    maxX = Math.floor(canvas.width / 2) - 1
-    minY = -Math.floor(canvas.height / 2)
-    maxY = Math.floor(canvas.height / 2) - 1
+    minX = 0
+    maxX = canvas.width - 1
+    minY = 0
+    maxY = canvas.height - 1
 
     this.d = 1 + Math.floor(1 + 5 * Math.random())
     this.theta = 2 * Math.PI * Math.random()
