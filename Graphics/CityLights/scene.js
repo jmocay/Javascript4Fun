@@ -1,7 +1,6 @@
 var canvas
 var ctx
 var cityLights
-var starfield
 
 function init() {
     canvas = document.querySelector(".drawing__area")
