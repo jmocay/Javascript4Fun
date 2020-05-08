@@ -23,14 +23,14 @@ function init() {
     xTranslate = Math.floor(width / 2)
     yTranslate = Math.floor(height / 2)
 
-    let n = 64 + Math.floor(64 * Math.random())
+    let n = 128 + Math.floor(64 * Math.random())
 
     stars = []
     for (let i = 0; i < n; i++) {
         stars.push(new Star())
     }
 
-    setInterval(draw, 32)
+    setInterval(draw, 16)
 }
 
 function draw() {
@@ -56,10 +56,12 @@ function Star() {
 }
 
 Star.prototype.reset = function() {
+    this.cnt = 0
     this.rad = 0
     this.theta = 2 * Math.PI * Math.random()
     this.x = 0; this.y = 0; this.z = 0
-    this.xprev = 0; this.yprev = 0
+    this.xprev = undefined
+    this.yprev = undefined
     this.speed = 1 + Math.floor(5 * Math.random())
     this.twist = -1 + Math.floor(2 * Math.random())
     this.twist = 0
@@ -70,7 +72,11 @@ Star.prototype.move = function() {
     this.speed += 1
     this.rad += this.speed / 5
     this.theta += this.twist * Math.PI / 180
-    this.xprev = this.x; this.yprev = this.y
+    this.cnt++
+    if (this.cnt / 5 == Math.floor(5 * Math.random())) {
+        this.xprev = this.x
+        this.yprev = this.y
+    }
     this.x = Math.floor(this.rad * Math.cos(this.theta))
     this.y = Math.floor(this.rad * Math.sin(this.theta))
     this.z += this.speed / 5
@@ -80,15 +86,30 @@ Star.prototype.move = function() {
 }
 
 Star.prototype.draw = function() {
-    ctx.fillStyle = rgbToHex(255, 255, 255)
+    let r = Math.floor(this.z * 5 / (ZMAX - ZMIN))
+    let grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, r)
+    grad.addColorStop(0, "white")
+    grad.addColorStop(1, rgbToHex(0, 0, 200))
+    ctx.fillStyle = grad
     ctx.beginPath()
-    ctx.arc(this.x, this.y, this.z * 5 / (ZMAX - ZMIN), 0, 2 * Math.PI)
+    ctx.arc(this.x, this.y, r, 0, 2 * Math.PI)
     ctx.fill()
-    ctx.strokeStyle = rgbToHex(255, 255, 255)
-    ctx.beginPath()
-    ctx.moveTo(this.x, this.y)
-    ctx.lineTo(this.xprev, this.yprev)
-    ctx.stroke()
+    if (this.xprev && this.yprev) {
+        ctx.strokeWeight = 3
+        ctx.strokeStyle = rgbToHex(255, 255, 255)
+        ctx.beginPath()
+        ctx.moveTo(this.xprev, this.yprev)
+        ctx.lineTo(this.x, this.y)
+        ctx.moveTo(this.xprev, this.yprev)
+        ctx.lineTo(this.x, this.y + r)
+        ctx.moveTo(this.xprev, this.yprev)
+        ctx.lineTo(this.x, this.y - r)
+        ctx.moveTo(this.xprev, this.yprev)
+        ctx.lineTo(this.x - r, this.y)
+        ctx.moveTo(this.xprev, this.yprev)
+        ctx.lineTo(this.x + r, this.y)
+        ctx.stroke()
+    }
 }
 
 function toHex(n) {
