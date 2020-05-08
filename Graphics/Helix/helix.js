@@ -1,3 +1,9 @@
+const COLORS = [
+    rgbToHex(255, 0, 0),
+    rgbToHex(0, 255, 0),
+    rgbToHex(0, 0, 255),
+    rgbToHex(255, 255, 0)
+]
 var canvas
 var ctx
 var helix
@@ -17,54 +23,60 @@ function rgbToHex(r, g, b) {
 
 class Ball {
     constructor(initArgs) {
-        this.x = initArgs.x
-        this.y = initArgs.y
+        this.x0 = initArgs.x0
+        this.y0 = initArgs.y0
         this.z = initArgs.z
+        this.a = initArgs.a
+        this.b = initArgs.b
         this.r = initArgs.r
+        this.theta = initArgs.theta
         this.fillStyle = initArgs.fillStyle
     }
 
     draw() {
+        let thetaRad = this.theta * Math.PI / 180
+        let x = this.x0 + this.a * Math.cos(thetaRad)
+        let y = this.y0 + this.b * Math.sin(thetaRad)
         ctx.fillStyle = this.fillStyle
         ctx.beginPath()
-        ctx.arc(this.x,
-                Math.floor(this.y * Math.cos(phi) + this.z * Math.cos(phi) / 3),
-                this.r,
-                0, 2 * Math.PI)
+        ctx.arc(x, Math.floor((y + this.z / 3) * Math.cos(phi)),
+                this.r, 0, 2 * Math.PI)
         ctx.fill()
+    }
+
+    move() {
+        this.theta++
+        if (this.theta == 360) {
+            this.theta = 0
+        }
     }
 }
 
-var colors = [
-    rgbToHex(255, 0, 0),
-    rgbToHex(0, 255, 0),
-    rgbToHex(0, 0, 255),
-    rgbToHex(255, 255, 0)
-]
-
 class Helix {
     constructor(initArgs) {
+        this.x0 = initArgs.x0
+        this.y0 = initArgs.y0
+        this.z0 = initArgs.z0
         this.a = initArgs.a
         this.b = initArgs.b
-        this.x0 = initArgs.x
-        this.y0 = initArgs.y
-        this.z0 = initArgs.z
         this.balls = []
         this.theta = 0
 
         let turns = initArgs.turns
 
-        let n = randInt(128, 256)
+        let n = randInt(164, 200)
         let r = 20
         for (let i = 0; i < n; i++) {
-            let theta = i * 2 * Math.PI * turns / n
             this.balls.push(
                 new Ball({
-                    x: this.x0 + Math.floor(this.a * Math.cos(theta)),
-                    y: this.y0 + Math.floor(this.b * Math.sin(theta)),
-                    z: this.z0 + i * r,
+                    x0: this.x0,
+                    y0: this.y0,
+                    z: i * r,
+                    a: this.a,
+                    b: this.b,
                     r: r,
-                    fillStyle: colors[Math.floor(4 * Math.random())]
+                    theta: Math.floor(i * turns * 360 / n),
+                    fillStyle: COLORS[Math.floor(4 * Math.random())]
                 })
             )
         }
@@ -75,27 +87,7 @@ class Helix {
     }
 
     move() {
-        this.theta++
-        if (this.theta > 360) {
-            this.theta = 0
-        }
-        let thetaRad = this.theta * Math.PI / 180
-        let xpred = this.balls[0].x
-        let ypred = this.balls[0].y
-        let zpred = this.balls[0].z
-        this.balls[0].x = this.x0 + Math.floor(this.a * Math.cos(thetaRad))
-        this.balls[0].y = this.y0 - Math.floor(this.b * Math.sin(thetaRad))
-        for (let i = 1; i < this.balls.length; i++) {
-            let xsave = this.balls[i].x
-            let ysave = this.balls[i].y
-            let zsave = this.balls[i].z
-            this.balls[i].x = xpred
-            this.balls[i].y = ypred
-            this.balls[i].z = zpred
-            xpred = xsave
-            ypred = ysave
-            zpred = zsave
-        }
+        this.balls.forEach(ball => ball.move())
     }
 }
 
@@ -105,18 +97,18 @@ function init() {
     canvas.height = 768
     ctx = canvas.getContext("2d")
 
-    phi = Math.PI / 4 // 30 degrees
+    phi = Math.PI / 3
 
     helix = new Helix({
-        a: Math.floor(canvas.width / 8),
+        x0: Math.floor(canvas.width / 2),
+        y0: Math.floor(canvas.height / 4),
+        z0: 0,
+        a: Math.floor(canvas.width / 5),
         b: 100,
-        x: Math.floor(canvas.width / 2),
-        y: Math.floor(canvas.height / 4),
-        z: 0,
-        turns: 4
+        turns: 5
     })
 
-    setInterval(draw, 32)
+    setInterval(draw, 16)
 }
 
 function draw() {
