@@ -28,9 +28,6 @@ class Ball {
         var grad = ctx.createRadialGradient(this.x, this.y, Math.floor(this.r / 3), this.x, this.y, this.r)
         grad.addColorStop(0, this.color)
         grad.addColorStop(1, "black")
-        // grad.addColorStop(0, "white")
-        // grad.addColorStop(1, rgbToHex(0, 0, 200))
-
         ctx.fillStyle = grad
         ctx.beginPath()
         ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI)
