@@ -1,7 +1,7 @@
-var canvas
-var ctx
-var asteroidBelt
-var starfield
+let canvas
+let ctx
+let asteroidBelt
+let starfield
 
 function init() {
     canvas = document.querySelector(".drawing__area")

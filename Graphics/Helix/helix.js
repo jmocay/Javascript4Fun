@@ -4,10 +4,10 @@ const COLORS = [
     rgbToHex(0, 0, 255),
     rgbToHex(255, 255, 0)
 ]
-var canvas
-var ctx
-var helix
-var phi
+let canvas
+let ctx
+let helix
+let phi
 
 function randInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min)

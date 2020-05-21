@@ -1,6 +1,6 @@
-var canvas
-var ctx
-var theta
+let canvas
+let ctx
+let theta
 
 function randInt(min, max) {
     return Math.round(Math.random() * (max - min) + min)

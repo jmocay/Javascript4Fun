@@ -1,6 +1,6 @@
-var canvas
-var ctx
-var starField
+let canvas
+let ctx
+let starField
 
 function init() {
     canvas = document.querySelector(".drawing__area")

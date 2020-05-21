@@ -1,6 +1,6 @@
-var canvas
-var ctx
-var planet
+let canvas
+let ctx
+let planet
 
 function init() {
     canvas = document.querySelector(".drawing__area")

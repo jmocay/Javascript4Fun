@@ -1,7 +1,7 @@
-var canvas
-var ctx
-var state
-var prevState
+let canvas
+let ctx
+let state
+let prevState
 
 const init = () => {
     canvas = document.querySelector(".drawing__canvas")

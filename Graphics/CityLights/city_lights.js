@@ -1,7 +1,7 @@
-var minX
-var minY
-var maxX
-var maxY
+let minX
+let minY
+let maxX
+let maxY
 
 function CityLights() {
     minX = 0
@@ -24,7 +24,7 @@ CityLights.prototype.move = function() {
     this.lights.forEach(light => light.move(this.d, this.theta))
 }
 
-var dirChoice = [
+let dirChoice = [
     Math.PI / 6, Math.PI / 2, 5 * Math.PI / 6
 ]
 

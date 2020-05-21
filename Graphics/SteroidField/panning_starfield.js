@@ -1,7 +1,7 @@
-var minX
-var minY
-var maxX
-var maxY
+let minX
+let minY
+let maxX
+let maxY
 
 function Starfield() {
     minX = 0

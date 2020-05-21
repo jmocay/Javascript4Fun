@@ -1,6 +1,6 @@
-var canvas
-var ctx
-var balls
+let canvas
+let ctx
+let balls
 
 function randInt(min, max) {
     return Math.round(Math.random() * (max - min) + min)

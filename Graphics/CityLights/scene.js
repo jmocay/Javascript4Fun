@@ -1,6 +1,6 @@
-var canvas
-var ctx
-var cityLights
+let canvas
+let ctx
+let cityLights
 
 function init() {
     canvas = document.querySelector(".drawing__area")

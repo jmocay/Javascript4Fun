@@ -1,6 +1,6 @@
-var canvas
-var ctx
-var polySticks
+let canvas
+let ctx
+let polySticks
 
 function randInt(min, max) {
     return Math.Math.floor(Math.random() * (max - min) + min)

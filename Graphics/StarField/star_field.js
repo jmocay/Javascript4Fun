@@ -5,11 +5,11 @@ const YMAX = 384
 const ZMIN = 0
 const ZMAX = 512
 
-var canvas
-var ctx
-var xTranslate
-var yTranslate
-var stars
+let canvas
+let ctx
+let xTranslate
+let yTranslate
+let stars
 
 function init() {
     canvas = document.querySelector(".drawing__area")

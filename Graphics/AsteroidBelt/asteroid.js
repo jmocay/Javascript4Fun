@@ -1,8 +1,8 @@
-var canvas
-var ctx
-var asteroidBelt
-var xTranslate
-var yTranslate
+let canvas
+let ctx
+let asteroidBelt
+let xTranslate
+let yTranslate
 
 function randInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min)

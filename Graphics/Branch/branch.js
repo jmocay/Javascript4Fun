@@ -1,6 +1,6 @@
-var canvas
-var ctx
-var trees
+let canvas
+let ctx
+let trees
 
 function randInt(min, max) {
     return Math.round(Math.random() * (max - min) + min)

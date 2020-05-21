@@ -1,8 +1,8 @@
-var canvas
-var ctx
-var xTranslate
-var yTranslate
-var planets
+let canvas
+let ctx
+let xTranslate
+let yTranslate
+let planets
 
 function init() {
     canvas = document.querySelector(".drawing__area")

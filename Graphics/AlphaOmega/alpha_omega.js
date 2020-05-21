@@ -1,9 +1,9 @@
-var canvas
-var ctx
-var textWidth
-var textHeight
-var tracks
-var unusedTracks
+let canvas
+let ctx
+let textWidth
+let textHeight
+let tracks
+let unusedTracks
 
 function randInt(min, max) {
     return Math.floor(Math.round(Math.random() * (max - min)) + min)
