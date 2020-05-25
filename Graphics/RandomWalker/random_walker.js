@@ -53,15 +53,15 @@ function init() {
     canvas.width = 1024
     canvas.height = 768
     ctx = canvas.getContext("2d")
-
+    ctx.fillStyle = rgbToHex(0, 0, 0)
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    
     walker = new RandomWalker()
 
     setInterval(draw, 16)
 }
 
 function draw() {
-    ctx.fillStyle = rgbToHex(0, 0, 0)
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
     walker.walk()
 }
 
