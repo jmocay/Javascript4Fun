@@ -2,18 +2,6 @@ let canvas
 let ctx
 let sweepers
 
-function randInt(min, max) {
-    return Math.floor(Math.round(Math.random() * (max - min)) + min)
-}
-
-function toHex(n) {
-    return n.toString(16).padStart(2, '0').toUpperCase()
-}
-
-function rgbToHex(r, g, b) {
-    return "#" + toHex(r) + toHex(g) + toHex(b)
-}
-
 class RadialSweep {
 
     constructor(initArgs) {
@@ -36,7 +24,7 @@ class RadialSweep {
         ctx.moveTo(this.x, this.y)
         let thetaRad = this.theta * Math.PI / 180
         ctx.lineTo(this.x + Math.floor(canvas.width * Math.cos(thetaRad)),
-                   this.y - Math.floor(canvas.height * Math.sin(thetaRad)))
+            this.y - Math.floor(canvas.height * Math.sin(thetaRad)))
         ctx.stroke()
     }
 
@@ -59,6 +47,18 @@ class RadialSweep {
             this.reset()
         }
     }
+}
+
+function randInt(min, max) {
+    return Math.floor(Math.round(Math.random() * (max - min)) + min)
+}
+
+function toHex(n) {
+    return n.toString(16).padStart(2, '0').toUpperCase()
+}
+
+function rgbToHex(r, g, b) {
+    return "#" + toHex(r) + toHex(g) + toHex(b)
 }
 
 function init() {
