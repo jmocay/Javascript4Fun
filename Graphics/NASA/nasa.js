@@ -1,8 +1,11 @@
 let canvas
 let ctx
 let stars
+let meteors
 let orbiter
 let textHeight
+let maxx
+let maxy
 
 class Orbiter {
     constructor(initArgs) {
@@ -21,7 +24,7 @@ class Orbiter {
     }
     
     draw() {
-        ctx.translate(Math.floor(canvas.width / 2), Math.floor(canvas.height / 2))
+        ctx.translate(maxx, maxy)
         ctx.rotate(Math.PI / 4)
         let theta = this.theta
         for (let i = 0; i < this.rs.length; i++) {
@@ -55,7 +58,7 @@ class Stars {
             this.stars[i] = {
                 x: Math.floor(r * Math.cos(thetaRad)),
                 y: Math.floor(r * Math.sin(thetaRad)),
-                r: randInt(1, 3),
+                r: randInt(1, 2),
             }
         }
     }
@@ -64,11 +67,62 @@ class Stars {
         this.stars.forEach(star => {
             ctx.fillStyle = rgbToHex(255, 255, 255)
             ctx.beginPath()
-            ctx.arc(Math.floor(canvas.width / 2 + star.x),
-                    Math.floor(canvas.height / 2 - star.y),
+            ctx.arc(Math.floor(maxx + star.x),
+                    Math.floor(maxy - star.y),
                     star.r, 0, 2 * Math.PI)
             ctx.fill()
         })
+    }
+}
+
+class Meteor {
+    constructor(initArgs) {
+        this.reset()
+        this.R = randInt(0, maxy)
+    }
+
+    reset() {
+        this.theta = randInt(1, 360)
+        this.speed = randInt(5, 10)
+        this.r = 1
+        this.R = randInt(0, maxy)
+    }
+
+    draw() {
+        ctx.fillStyle = rgbToHex(255, 255, 255)
+        ctx.beginPath()
+        ctx.arc(this.x, this.y, Math.floor(this.r + 3 * this.r * this.R / maxy), 0, 2 * Math.PI)
+        ctx.fill()
+    }
+
+    move() {
+        let thetaRad = this.theta * Math.PI / 180
+        this.x = Math.floor(maxx + this.R * Math.cos(thetaRad))
+        this.y = Math.floor(maxy - this.R * Math.sin(thetaRad))
+        this.R += this.speed
+        if (this.R > maxy) {
+            this.reset()
+        }
+        else {
+            this.speed += 5
+        }
+    }
+}
+
+class MeteorField {
+    constructor() {
+        this.meteors = Array(randInt(80, 120))
+        for (let i = 0; i < this.meteors.length; i++) {
+            this.meteors[i] = new Meteor()
+        }
+    }
+
+    draw() {
+        this.meteors.forEach(meteor => meteor.draw())
+    }
+
+    move() {
+        this.meteors.forEach(meteor => meteor.move())
     }
 }
 
@@ -78,10 +132,15 @@ function init() {
     canvas.height = 768
     ctx = canvas.getContext("2d")
 
+    maxx = Math.floor(canvas.width / 2)
+    maxy = Math.floor(canvas.height / 2)
+
     stars = new Stars({
-        n: 100,
+        n: 64,
         r: 360
     })
+
+    meteors = new MeteorField()
 
     orbiter = new Orbiter({
         a: 360,
@@ -100,8 +159,8 @@ function draw() {
 
     ctx.fillStyle = rgbToHex(8, 8, 127)
     ctx.beginPath()
-    let r = Math.floor(canvas.height / 2)
-    ctx.arc(Math.floor(canvas.width / 2), r, r, 0, 2 * Math.PI)
+    let r = maxy
+    ctx.arc(maxx, r, r, 0, 2 * Math.PI)
     ctx.fill()
 
     textHeight = 200
@@ -110,6 +169,9 @@ function draw() {
     ctx.fillText("NASA", 240, 420)
 
     stars.draw()
+
+    meteors.move()
+    meteors.draw()
 
     orbiter.move()
     orbiter.draw()
