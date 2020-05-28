@@ -65,7 +65,7 @@ class Superman {
         }
         ctx.rotate(this.theta * Math.PI / 180)
         ctx.strokeStyle = rgbToHex(0, 0, 255)
-        ctx.strokeWeight = 10
+        ctx.lineWidth = 1
         let x = Math.floor(-40 * this.text.length / 3)
         let y = Math.floor(-40)
         let i = 40
@@ -77,6 +77,7 @@ class Superman {
         }
         ctx.fillStyle = rgbToHex(0, 0, 255)
         ctx.fillText(this.text, x, y)
+        ctx.lineWidth = 4
         ctx.strokeStyle = rgbToHex(255, 255, 255)
         ctx.strokeText(this.text, x, y)
     }
