@@ -51,6 +51,7 @@ class Superman {
         this.theta = 10 * this.dir[randInt(0, 1)]
         this.dtheta = (this.theta < 0) ? 0.1 : -0.1
         this.maxHeight = 640
+        this.still = 0
         this.selIdx++
         if (this.selIdx >= this.texts.length) {
             this.selIdx = 0
@@ -69,35 +70,39 @@ class Superman {
         let x = Math.floor(-40 * this.text.length / 3)
         let y = Math.floor(-40)
         let i = 40
-        for (; i < this.maxHeight; i += 2) {
+        while (i < this.maxHeight) {
             x -= 4
             y += this.dy
             ctx.font = "bold " + i + "px arial"
             ctx.strokeText(this.text, x, y)
+            i += 2
         }
-        ctx.fillStyle = rgbToHex(0, 0, 255)
-        ctx.fillText(this.text, x, y)
-        ctx.lineWidth = 4
-        ctx.strokeStyle = rgbToHex(255, 255, 255)
+        ctx.lineWidth = 3
+        ctx.strokeStyle = rgbToHex(0, 0, 255)
         ctx.strokeText(this.text, x, y)
     }
 
     fade() {
-        this.maxHeight -= 5
         if (this.maxHeight < 40) {
-            this.reset()
+            this.still++
+            if (this.still > 64) {
+                this.reset()
+            }
         }
+        else {
+            this.maxHeight -= 5
+        }     
     }
 }
 
 class Star {
     constructor(initArgs) {
         this.reset()
-        this.R = randInt(80, maxx)
+        this.R = randInt(20, maxx)
     }
 
     reset() {
-        this.theta = randInt(1, 360)
+        this.theta = (randInt(0, 1)) ? randInt(-80, 80) : randInt(110, 260)
         this.speed = randInt(5, 10)
         this.r = randInt(1, 2)
         this.R = randInt(120, 200)
@@ -133,7 +138,7 @@ function init() {
     miny = -Math.floor(canvas.height / 2)
     maxy = Math.floor(canvas.height / 2)
 
-    let n = randInt(40, 80)
+    let n = randInt(64, 128)
     stars = Array(n)
     for (let i = 0; i < n; i++) {
         stars[i] = new Star({})
