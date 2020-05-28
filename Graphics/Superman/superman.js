@@ -2,16 +2,6 @@ let canvas
 let ctx
 let superman
 
-function init() {
-    canvas = document.querySelector(".drawing__area")
-    canvas.width = 1024
-    canvas.height = 768
-    ctx = canvas.getContext("2d")
-
-    superman = new Superman()
-    setInterval(draw, 16)
-}
-
 class Superman {
     constructor(initArgs) {
         this.texts = [
@@ -69,6 +59,16 @@ class Superman {
             this.reset()
         }
     }
+}
+
+function init() {
+    canvas = document.querySelector(".drawing__area")
+    canvas.width = 1024
+    canvas.height = 768
+    ctx = canvas.getContext("2d")
+
+    superman = new Superman()
+    setInterval(draw, 16)
 }
 
 function draw() {
