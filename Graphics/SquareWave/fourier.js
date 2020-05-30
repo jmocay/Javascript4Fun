@@ -31,6 +31,7 @@ class FourierSeries {
             y = this.amp * y
             if (x > 1) {
                 ctx.strokeStyle = rgbToHex(0, 255, 0)
+                ctx.lineWidth = 1
                 ctx.moveTo(x, y)
                 ctx.lineTo(xprev, yprev)
                 ctx.stroke()
@@ -75,21 +76,32 @@ class Armature {
                 (2 * n - 1) * 2 * Math.PI * this.freq * this.t / 180
             )
 
-            ctx.strokeStyle = rgbToHex(0, 255, 0)
+            ctx.strokeStyle = rgbToHex(255, 255, 255)
+            ctx.lineWidth = 1
             ctx.beginPath()
             ctx.arc(x0 - xOffset, y0, r, 0, 2 * Math.PI)
+            ctx.stroke()
+
+            let ptx = x0 + x - xOffset
+            let pty = y0 + y
+
+            ctx.strokeStyle = rgbToHex(255, 255, 255)
+            ctx.lineWidth = .5
+            ctx.beginPath()
+            ctx.moveTo(x0 - xOffset, y0)
+            ctx.lineTo(ptx, pty)
             ctx.stroke()
 
             ctx.beginPath()
             if (n == this.harmonics) {
                 ctx.fillStyle = rgbToHex(255, 255, 255)
-                tipX = x0 + x - xOffset
-                tipY = y0 + y
-                ctx.arc(tipX, tipY, 4, 0, 2 * Math.PI)
+                ctx.arc(ptx, pty, 4, 0, 2 * Math.PI)
+                tipX = ptx
+                tipY = pty
             }
             else {
                 ctx.fillStyle = rgbToHex(0, 200, 255)
-                ctx.arc(x0 + x - xOffset, y0 + y, 3, 0, 2 * Math.PI)
+                ctx.arc(ptx, pty, 3, 0, 2 * Math.PI)
             }
             ctx.fill()
 
@@ -116,13 +128,13 @@ function init() {
     fourier = new FourierSeries({
         amp: 100,
         lambda: xTranslate / 2,
-        n: 5,
+        n: 4,
         freq: 1
     })
 
     armature = new Armature({
         amp: 100,
-        n: 5,
+        n: 4,
         freq: 1
     })
 
@@ -139,6 +151,7 @@ function draw() {
     let armTip = armature.draw()
     fourier.draw()
     ctx.strokeStyle = rgbToHex(128, 128, 128)
+    ctx.lineWidth = 1
     ctx.beginPath()
     ctx.moveTo(armTip.x, armTip.y)
     ctx.lineTo(0, armTip.y)
