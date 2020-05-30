@@ -97,7 +97,7 @@ function init() {
 
     fourier = new FourierSeries({
         amp: 100,
-        lambda: xTranslate,
+        lambda: xTranslate / 2,
         n: 2,
         freq: 1
     })
@@ -108,7 +108,7 @@ function init() {
         freq: 1
     })
 
-    setInterval(draw, 32) // 1 / 30th of a second refresh
+    setInterval(draw, 16) // approx 60 frames / sec refresh rate
 }
 
 function draw() {
