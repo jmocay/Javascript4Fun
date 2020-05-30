@@ -95,19 +95,40 @@ Star.prototype.draw = function() {
     ctx.arc(this.x, this.y, r, 0, 2 * Math.PI)
     ctx.fill()
     if (this.xprev && this.yprev) {
-        ctx.strokeWeight = 3
+
+        ctx.strokeStyle = rgbToHex(0, 128, 255)
+        ctx.lineWidth = 1
+        ctx.beginPath()
+        ctx.moveTo(this.xprev, this.yprev)
+        ctx.lineTo(this.x, this.y + r)
+        ctx.stroke()
+
+        ctx.strokeStyle = rgbToHex(0, 128, 255)
+        ctx.lineWidth = 1
+        ctx.beginPath()
+        ctx.moveTo(this.xprev, this.yprev)
+        ctx.lineTo(this.x, this.y - r)
+        ctx.stroke()
+
+        ctx.strokeStyle = rgbToHex(0, 128, 255)
+        ctx.lineWidth = 1
+        ctx.beginPath()
+        ctx.moveTo(this.xprev, this.yprev)
+        ctx.lineTo(this.x - r, this.y)
+        ctx.stroke()
+
+        ctx.strokeStyle = rgbToHex(0, 128, 255)
+        ctx.lineWidth = 1
+        ctx.beginPath()
+        ctx.moveTo(this.xprev, this.yprev)
+        ctx.lineTo(this.x + r, this.y)
+        ctx.stroke()
+
         ctx.strokeStyle = rgbToHex(255, 255, 255)
+        ctx.lineWidth = 2
         ctx.beginPath()
         ctx.moveTo(this.xprev, this.yprev)
         ctx.lineTo(this.x, this.y)
-        ctx.moveTo(this.xprev, this.yprev)
-        ctx.lineTo(this.x, this.y + r)
-        ctx.moveTo(this.xprev, this.yprev)
-        ctx.lineTo(this.x, this.y - r)
-        ctx.moveTo(this.xprev, this.yprev)
-        ctx.lineTo(this.x - r, this.y)
-        ctx.moveTo(this.xprev, this.yprev)
-        ctx.lineTo(this.x + r, this.y)
         ctx.stroke()
     }
 }
