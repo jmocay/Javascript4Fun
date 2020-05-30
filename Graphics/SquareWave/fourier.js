@@ -20,6 +20,7 @@ class FourierSeries {
             this.t = 0
         }
 
+        let xprev, yprev
         for (let x = 0; x < xTranslate; x++) {
             let y = 0
             for (let n = 1; n <= this.harmonics; n++) {
@@ -28,10 +29,20 @@ class FourierSeries {
                 ) / (2 * n - 1)
             }
             y = this.amp * y
-            ctx.fillStyle = rgbToHex(255, 255, 255)
+            if (x > 1) {
+                ctx.strokeStyle = rgbToHex(0, 255, 0)
+                ctx.moveTo(x, y)
+                ctx.lineTo(xprev, yprev)
+                ctx.stroke()
+            }
+
+            ctx.fillStyle = rgbToHex(0, 255, 0)
             ctx.beginPath()
-            ctx.arc(x, y, 2, 0, 2 * Math.PI)
+            ctx.arc(x, y, .5, 0, 2 * Math.PI)
             ctx.fill()
+
+            xprev = x
+            yprev = y
         }
     }
 }
@@ -47,7 +58,7 @@ class Armature {
     draw() {
         this.t += 1
         if (this.t == 360) {
-            this.reset()
+            this.t = 0
         }
 
         let xOffset = xTranslate / 2
@@ -55,6 +66,7 @@ class Armature {
         let y0 = 0
         let tipX, tipY
         for (let n = 1; n <= this.harmonics; n++) {
+
             let r = this.amp / (2 * n - 1)
             let x = r * Math.cos(
                 (2 * n - 1) * 2 * Math.PI * this.freq * this.t / 180
@@ -63,20 +75,26 @@ class Armature {
                 (2 * n - 1) * 2 * Math.PI * this.freq * this.t / 180
             )
 
-            ctx.strokeStyle = rgbToHex(255, 255, 255)
+            ctx.strokeStyle = rgbToHex(0, 255, 0)
             ctx.beginPath()
             ctx.arc(x0 - xOffset, y0, r, 0, 2 * Math.PI)
             ctx.stroke()
 
-            ctx.fillStyle = rgbToHex(255, 255, 255)
             ctx.beginPath()
-            tipX = x0 + x - xOffset
-            tipY = y0 + y
-            ctx.arc(tipX, tipY, 3, 0, 2 * Math.PI)
+            if (n == this.harmonics) {
+                ctx.fillStyle = rgbToHex(255, 255, 255)
+                tipX = x0 + x - xOffset
+                tipY = y0 + y
+                ctx.arc(tipX, tipY, 4, 0, 2 * Math.PI)
+            }
+            else {
+                ctx.fillStyle = rgbToHex(0, 200, 255)
+                ctx.arc(x0 + x - xOffset, y0 + y, 3, 0, 2 * Math.PI)
+            }
             ctx.fill()
 
-            x0 = x
-            y0 = y
+            x0 += x
+            y0 += y
         }
 
         return {
@@ -98,17 +116,17 @@ function init() {
     fourier = new FourierSeries({
         amp: 100,
         lambda: xTranslate / 2,
-        n: 2,
+        n: 5,
         freq: 1
     })
 
     armature = new Armature({
         amp: 100,
-        n: 2,
+        n: 5,
         freq: 1
     })
 
-    setInterval(draw, 16) // approx 60 frames / sec refresh rate
+    setInterval(draw, 64) // set this to 16 for approx 60 frames/sec refresh rate
 }
 
 function draw() {
