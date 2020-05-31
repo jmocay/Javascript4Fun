@@ -23,10 +23,10 @@ class FourierSeries {
         let xprev, yprev
         for (let x = 0; x < xTranslate; x++) {
             let y = 0
-            for (let n = 1; n <= this.harmonics; n++) {
+            for (let k = 1; k <= this.harmonics; k++) {
                 y += -Math.sin(
-                    (2 * n - 1) * 2 * Math.PI * (this.freq * this.t / 180 + x / this.lambda)
-                ) / (2 * n - 1)
+                    (2 * k - 1) * 2 * Math.PI * (this.freq * this.t / 180 + x / this.lambda)
+                ) / (2 * k - 1)
             }
             y = this.amp * y
             if (x > 1) {
@@ -66,15 +66,12 @@ class Armature {
         let x0 = 0
         let y0 = 0
         let tipX, tipY
-        for (let n = 1; n <= this.harmonics; n++) {
+        for (let k = 1; k <= this.harmonics; k++) {
 
-            let r = this.amp / (2 * n - 1)
-            let x = r * Math.cos(
-                (2 * n - 1) * 2 * Math.PI * this.freq * this.t / 180
-            )
-            let y = -r * Math.sin(
-                (2 * n - 1) * 2 * Math.PI * this.freq * this.t / 180
-            )
+            let r = this.amp / (2 * k - 1)
+            let theta = (2 * k - 1) * 2 * Math.PI * this.freq * this.t / 180
+            let x = r * Math.cos(theta)
+            let y = -r * Math.sin(theta)
 
             ctx.strokeStyle = rgbToHex(255, 255, 255)
             ctx.lineWidth = 1
@@ -93,8 +90,8 @@ class Armature {
             ctx.stroke()
 
             ctx.beginPath()
-            if (n == this.harmonics) {
-                ctx.fillStyle = rgbToHex(255, 255, 255)
+            if (k == this.harmonics) {
+                ctx.fillStyle = rgbToHex(255, 0, 0)
                 ctx.arc(ptx, pty, 4, 0, 2 * Math.PI)
                 tipX = ptx
                 tipY = pty
