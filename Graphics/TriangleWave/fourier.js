@@ -91,7 +91,7 @@ class Armature {
 
             ctx.beginPath()
             if (k == this.harmonics-1) {
-                ctx.fillStyle = rgbToHex(255, 255, 255)
+                ctx.fillStyle = rgbToHex(255, 0, 0)
                 ctx.arc(ptx, pty, 4, 0, 2 * Math.PI)
                 tipX = ptx
                 tipY = pty
