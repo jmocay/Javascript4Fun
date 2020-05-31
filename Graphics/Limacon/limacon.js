@@ -43,7 +43,7 @@ class Limacon {
         // plot the limacon curve
         if (this.pts.length >= 3) {
             ctx.strokeStyle = rgbToHex(255, 0, 0)
-            ctx.lineWidth = 1
+            ctx.lineWidth = 2
             for (let i = 0; i < this.pts.length - 2; i++) {
                 ctx.beginPath()
                 ctx.moveTo(this.pts[i].ptx, this.pts[i].pty)
@@ -65,7 +65,7 @@ class Limacon {
 
         // plot the two circles
         ctx.strokeStyle = rgbToHex(255, 255, 255)
-        ctx.lineWidth = 2
+        ctx.lineWidth = 4
         ctx.beginPath()
         ctx.arc(0, 0, this.r, 0, 2 * Math.PI)
         ctx.stroke()
