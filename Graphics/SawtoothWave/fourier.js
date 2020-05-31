@@ -32,7 +32,6 @@ class FourierSeries {
             if (x > 1) {
                 ctx.strokeStyle = rgbToHex(0, 255, 0)
                 ctx.lineWidth = 1
-                ctx.beginPath()
                 ctx.moveTo(x, y)
                 ctx.lineTo(xprev, yprev)
                 ctx.stroke()
@@ -67,7 +66,6 @@ class Armature {
         let x0 = 0
         let y0 = 0
         let tipX, tipY
-
         for (let k = 1; k <= this.harmonics; k++) {
 
             let r = 2 * this.amp * Math.pow(-1, k) / (k * Math.PI)
@@ -91,14 +89,15 @@ class Armature {
             ctx.lineTo(ptx, pty)
             ctx.stroke()
 
+            ctx.beginPath()
             if (k == this.harmonics) {
-                ctx.fillStyle = rgbToHex(255, 255, 255)
+                ctx.fillStyle = rgbToHex(255, 0, 0)
+                ctx.arc(ptx, pty, 4, 0, 2 * Math.PI)
                 tipX = ptx
                 tipY = pty
-                ctx.arc(ptx, pty, 4, 0, 2 * Math.PI)
             }
             else {
-                ctx.fillStyle = rgbToHex(255, 255, 255)
+                ctx.fillStyle = rgbToHex(0, 200, 255)
                 ctx.arc(ptx, pty, 3, 0, 2 * Math.PI)
             }
             ctx.fill()
@@ -146,12 +145,10 @@ function draw() {
 
     ctx.translate(xTranslate, yTranslate)
 
-    fourier.draw()
-
     let armTip = armature.draw()
-
+    fourier.draw()
     ctx.strokeStyle = rgbToHex(128, 128, 128)
-    ctx.lineWidth = 2
+    ctx.lineWidth = 1
     ctx.beginPath()
     ctx.moveTo(armTip.x, armTip.y)
     ctx.lineTo(0, armTip.y)
