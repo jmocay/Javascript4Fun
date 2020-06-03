@@ -6,6 +6,7 @@ let minx
 let maxx
 let miny
 let maxy
+let starColors
 
 class Superman {
     constructor(initArgs) {
@@ -71,7 +72,7 @@ class Superman {
         if (this.stage == 3) {
             let i = 0
             while (i < this.superZoomCount) {
-                ctx.font = '' + (2*i + this.fontSize) + 'px Serif'
+                ctx.font = '' + (2*i + this.fontSize) + 'px arial'
                 ctx.lineWidth = 1
                 textSize = ctx.measureText(this.text)
                 x = Math.floor(.5 * canvas.width - textSize.width / 2)
@@ -120,18 +121,19 @@ class Superman {
 class Star {
     constructor(initArgs) {
         this.reset()
-        this.R = randInt(20, maxx)
+        this.R = randInt(80, maxx)
     }
 
     reset() {
         this.theta = (randInt(0, 1)) ? randInt(-80, 80) : randInt(110, 260)
-        this.speed = randInt(5, 10)
-        this.r = randInt(1, 2)
-        this.R = randInt(120, 200)
+        this.speed = randInt(1, 3)
+        this.r = .5 * randInt(1, 4)
+        this.R = randInt(80, 200)
+        this.color = starColors[randInt(0, starColors.length-1)]
     }
 
     draw() {
-        ctx.fillStyle = rgbToHex(255, 255, 255)
+        ctx.fillStyle = this.color
         ctx.beginPath()
         ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI)
         ctx.fill()
@@ -142,7 +144,7 @@ class Star {
         this.x = this.R * Math.cos(thetaRad)
         this.y = -this.R * Math.sin(thetaRad)
         this.R += this.speed
-        this.speed += .5
+        this.speed += .15
         if (this.x < minx || this.x > maxx || this.y < miny || this.y > maxy) {
             this.reset()
         }
@@ -154,6 +156,19 @@ function init() {
     canvas.width = 1024
     canvas.height = 768
     ctx = canvas.getContext("2d")
+
+    starColors = [
+        rgbToHex(0, 0, 255),
+        rgbToHex(255, 255, 255),
+        rgbToHex(255, 255, 255),
+        rgbToHex(255, 255, 255),
+        rgbToHex(255, 255, 255),
+        rgbToHex(255, 255, 255),
+        rgbToHex(255, 255, 255),
+        rgbToHex(255, 255, 255),
+        rgbToHex(255, 255, 255),
+        rgbToHex(255, 0, 0)
+    ]
 
     minx = -Math.floor(canvas.width / 2)
     maxx = Math.floor(canvas.width / 2)
@@ -167,6 +182,7 @@ function init() {
     }
 
     superman = new Superman()
+
     setInterval(draw, 16)
 }
 
@@ -179,6 +195,7 @@ function draw() {
     superman.zoom()
 
     ctx.translate(Math.floor(canvas.width / 2), Math.floor(canvas.height / 2))
+
     stars.forEach(star => {
         star.move()
         star.draw()

@@ -41,17 +41,16 @@ class Superman {
             "PRODUCED BY PIERRE SPENGLER",
             "DIRECTED BY RICHARD DONNER"
         ]
+        this.zoomEndFont = 40
+        this.stillDelay = 64
         this.dir = [-1, 1]
         this.selIdx = this.texts.length
         this.reset()
     }
 
     reset() {
-        this.dy = 4 * this.dir[randInt(0, 1)]
-        this.theta = 10 * this.dir[randInt(0, 1)]
-        this.dtheta = (this.theta < 0) ? 0.1 : -0.1
-        this.maxHeight = 640
-        this.still = 0
+        this.stage = 1
+        this.fontSize = 1
         this.selIdx++
         if (this.selIdx >= this.texts.length) {
             this.selIdx = 0
@@ -60,52 +59,82 @@ class Superman {
     }
 
     draw() {
-        this.theta += this.dtheta
-        if (Math.abs(this.theta) < .5) {
-            this.theta = 0
+        ctx.font = 'bold ' + this.fontSize + 'px Arial'
+        ctx.fillStyle = rgbToHex(255, 255, 255)
+
+        let textSize = ctx.measureText(this.text)
+        let x = Math.floor(.5 * canvas.width - textSize.width / 2)
+        let y = Math.floor(.5 * canvas.height - (textSize.actualBoundingBoxAscent + textSize.actualBoundingBoxDescent) / 2)
+
+        ctx.fillText(this.text, x, y)
+
+        if (this.stage == 3) {
+            ctx.fillStyle = rgbToHex(0, 0, 0)
+            ctx.fillText(this.text, x, y)
+
+            ctx.strokeStyle = rgbToHex(0, 0, 255)
+            let i = 0
+            while (i < this.superZoomCount) {
+                ctx.font = '' + (2*i + this.fontSize) + 'px Arial'
+                ctx.lineWidth = 1
+                textSize = ctx.measureText(this.text)
+                x = Math.floor(.5 * canvas.width - textSize.width / 2)
+                y += 1 * this.ydir
+                ctx.strokeText(this.text, x, y)                
+                i += 1
+            }
+            ctx.font = 'bold' + (2 * i + this.fontSize) + 'px Arial'
+            ctx.fillStyle = rgbToHex(255, 255, 255)
+            ctx.fillText(this.text, x, y)
         }
-        ctx.rotate(this.theta * Math.PI / 180)
-        ctx.strokeStyle = rgbToHex(0, 0, 255)
-        ctx.lineWidth = 1
-        let x = Math.floor(-40 * this.text.length / 3)
-        let y = Math.floor(-40)
-        let i = 40
-        while (i < this.maxHeight) {
-            x -= 4
-            y += this.dy
-            ctx.font = "bold " + i + "px arial"
-            ctx.strokeText(this.text, x, y)
-            i += 2
-        }
-        ctx.lineWidth = 3
-        ctx.strokeStyle = rgbToHex(0, 0, 255)
-        ctx.strokeText(this.text, x, y)
     }
 
-    fade() {
-        if (this.maxHeight < 40) {
-            this.still++
-            if (this.still > 64) {
+    zoom() {
+        if (this.stage == 1) {
+            if (this.fontSize < this.zoomEndFont) {
+                this.fontSize++
+            }
+            else {
+                this.stage++
+                this.stillCount = 0
+            }
+            return
+        }
+
+        if (this.stage == 2) {
+            if (this.stillCount < this.stillDelay) {
+                this.stillCount++
+            }
+            else {
+                this.stage++
+                this.ydir = 2*this.dir[randInt(0, 1)]
+                this.superZoomCount = 0
+            }
+            return
+        }
+
+        if (this.stage == 3) {
+            if (this.superZoomCount < 64) {
+                this.superZoomCount++
+            }
+            else {
                 this.reset()
             }
         }
-        else {
-            this.maxHeight -= 5
-        }     
     }
 }
 
 class Star {
     constructor(initArgs) {
         this.reset()
-        this.R = randInt(80, maxx)
+        this.R = randInt(20, maxx)
     }
 
     reset() {
         this.theta = (randInt(0, 1)) ? randInt(-80, 80) : randInt(110, 260)
-        this.speed = randInt(1, 3)
+        this.speed = randInt(5, 10)
         this.r = randInt(1, 2)
-        this.R = randInt(80, 200)
+        this.R = randInt(120, 200)
     }
 
     draw() {
@@ -120,7 +149,7 @@ class Star {
         this.x = this.R * Math.cos(thetaRad)
         this.y = -this.R * Math.sin(thetaRad)
         this.R += this.speed
-        this.speed += .15
+        this.speed += .5
         if (this.x < minx || this.x > maxx || this.y < miny || this.y > maxy) {
             this.reset()
         }
@@ -145,7 +174,6 @@ function init() {
     }
 
     superman = new Superman()
-
     setInterval(draw, 16)
 }
 
@@ -154,15 +182,14 @@ function draw() {
     ctx.fillStyle = rgbToHex(0, 0, 0)
     ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-    ctx.translate(Math.floor(canvas.width / 2), Math.floor(canvas.height / 2))
+    superman.draw()
+    superman.zoom()
 
+    ctx.translate(Math.floor(canvas.width / 2), Math.floor(canvas.height / 2))
     stars.forEach(star => {
         star.move()
         star.draw()
     })
-
-    superman.draw()
-    superman.fade()
 }
 
 function randInt(min, max) {
