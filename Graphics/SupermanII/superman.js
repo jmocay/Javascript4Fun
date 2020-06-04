@@ -60,7 +60,7 @@ class Superman {
     }
 
     draw() {
-        ctx.font = 'bold ' + this.fontSize + 'px Serif'
+        ctx.font = 'bold ' + this.fontSize + 'px Arial'
         ctx.strokeStyle = rgbToHex(0, 0, 255)
         ctx.lineWidth = 2
 
@@ -70,9 +70,12 @@ class Superman {
         ctx.strokeText(this.text, x, y)
 
         if (this.stage == 3) {
+            ctx.strokeStyle = rgbToHex(0, 0, 0)
+            ctx.strokeText(this.text, x, y)
             let i = 0
             while (i < this.superZoomCount) {
-                ctx.font = '' + (2*i + this.fontSize) + 'px arial'
+                ctx.font = '' + (2*i + this.fontSize) + 'px Arial'
+                ctx.strokeStyle = rgbToHex(0, 0, 255)
                 ctx.lineWidth = 1
                 textSize = ctx.measureText(this.text)
                 x = Math.floor(.5 * canvas.width - textSize.width / 2)
