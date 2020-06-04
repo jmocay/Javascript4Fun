@@ -56,22 +56,37 @@ class Superman {
             this.selIdx = 0
         }
         this.text = this.texts[this.selIdx]
+        this.ydir = this.dir[randInt(0, 1)]
     }
 
     draw() {
-        ctx.font = 'bold ' + this.fontSize + 'px Arial'
-        ctx.fillStyle = rgbToHex(255, 255, 255)
-
+        let baseFont = 'bold ' + this.fontSize + 'px Arial'
+        ctx.font = baseFont
         let textSize = ctx.measureText(this.text)
         let x = Math.floor(.5 * canvas.width - textSize.width / 2)
         let y = Math.floor(.5 * canvas.height - (textSize.actualBoundingBoxAscent + textSize.actualBoundingBoxDescent) / 2)
 
+        if (this.stage <= 2) {
+            let i = 0
+            while (i < 20) {
+                ctx.font = '' + (this.fontSize - i) + 'px Arial'
+                textSize = ctx.measureText(this.text)
+                let xshadow = Math.floor(.5 * canvas.width - textSize.width / 2)
+                let yshadow = y + ((this.ydir < 0) ? (2 * i * this.ydir) : (1.5 * i * this.ydir))
+                ctx.strokeStyle = rgbToHex(0, 0, 255)
+                ctx.lineWidth = 1
+                ctx.strokeText(this.text, xshadow, yshadow)
+                i += .5
+            }
+        }
+
+        ctx.font = baseFont
+        ctx.fillStyle = rgbToHex(255, 255, 255)
         ctx.fillText(this.text, x, y)
 
         if (this.stage == 3) {
             ctx.fillStyle = rgbToHex(0, 0, 0)
             ctx.fillText(this.text, x, y)
-
             ctx.strokeStyle = rgbToHex(0, 0, 255)
             let i = 0
             while (i < this.superZoomCount) {
@@ -79,7 +94,7 @@ class Superman {
                 ctx.lineWidth = 1
                 textSize = ctx.measureText(this.text)
                 x = Math.floor(.5 * canvas.width - textSize.width / 2)
-                y += 1 * this.ydir
+                y += 2 * this.ydir
                 ctx.strokeText(this.text, x, y)                
                 i += 1
             }
@@ -95,7 +110,7 @@ class Superman {
                 this.fontSize++
             }
             else {
-                this.stage++
+                this.stage++                
                 this.stillCount = 0
             }
             return
@@ -107,7 +122,6 @@ class Superman {
             }
             else {
                 this.stage++
-                this.ydir = 2*this.dir[randInt(0, 1)]
                 this.superZoomCount = 0
             }
             return
