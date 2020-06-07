@@ -42,28 +42,36 @@ class Superman {
             "DIRECTED BY RICHARD DONNER"
         ]
         this.credits = []
-        this.fontSize = 50
-        this.selIdx = this.texts.length
-        this.reset()
+        this.fontSize = 40
+        ctx.font = 'bold ' + this.fontSize + 'px Arial'
+        this.texts.forEach((text, i) => {
+            let textMetrics = ctx.measureText(text)
+            this.credits.push({
+                text: text,
+                x: -textMetrics.width / 2,
+                y: canvas.height / 2 + i * canvas.height / 4
+            })
+        })
     }
 
     reset() {
-        this.selIdx++
-        if (this.selIdx >= this.texts.length) {
-            this.selIdx = 0
-        }
-        let text = this.texts[this.selIdx]
         ctx.font = 'bold ' + this.fontSize + 'px Arial'
+        let text = this.credits.shift().text
         let textMetrics = ctx.measureText(text)
         this.credits.push({
             text: text,
             x: -textMetrics.width / 2,
-            y: canvas.height / 2
+            y: canvas.height / 2 + this.credits.length * canvas.height / 4
         })
     }
 
     draw() {
         this.credits.forEach(credit => {
+            // display only visible credits
+            if (credit.y >= canvas.height / 2) {
+                return
+            }
+            // display shadow
             let shdwFontSize = this.fontSize
             let dy = -2 * credit.y / (canvas.height / 2)
             for (let i=0; i<40; i++) {
@@ -73,7 +81,7 @@ class Superman {
                 ctx.strokeText(credit.text, -textMetrics.width / 2, credit.y + i*dy)
                 shdwFontSize--
             }
-
+            // display text
             ctx.font = 'bold ' + this.fontSize + 'px Arial'
             ctx.fillStyle = rgbToHex(255, 255, 255)
             ctx.fillText(credit.text, credit.x, credit.y)
@@ -84,7 +92,6 @@ class Superman {
         this.credits.forEach(credit => {
             credit.y -= 3
             if (credit.y < -canvas.height / 2) {
-                this.credits.shift()
                 this.reset()
             }
         })
